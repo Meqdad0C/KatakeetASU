@@ -14,8 +14,41 @@ void stopwatch(int m, int s)
   {
     if(s>=0){
     displayTime(m,s);
-        if(flagD==1){flagD=0; FlagH=1;return; }
-    delay_ms(1000);
+   for(int i=1;i<=20;i++){
+    if(FlagX==1||FlagX==2){
+        delay_ms(300);
+        FlagX=0;
+      GPIO_PORTF_DATA_R&=~ 0X0E;
+                   while(1){
+
+                          GPIO_PORTF_DATA_R^= 0X02;
+                           delay_ms(100);
+
+
+               if(FlagX==2){
+                           flagD = 1;
+                           GPIO_PORTF_DATA_R &=~ 0X0E;
+
+
+                           FlagX=0;
+                          break;
+                       }
+                       if(FlagF==1){
+                            GPIO_PORTF_DATA_R &=~ 0X0E;
+                            GPIO_PORTF_DATA_R|= 0X0E;
+                            FlagF=0;
+                            FlagX=0;
+
+                       break;
+                       }
+
+                   }
+      }
+
+    if(flagD==1){flagD=0; FlagH=1;FlagF=0;return; }
+    delay_ms(50);
+
+   }
     s--;
 
     }
@@ -35,15 +68,44 @@ void stopwatch_s(int s){
     state='S';
     while(s>0){
     displayTime_s(s);
-    if(flagD==1){
-    flagD=0;
-    FlagH=1;
-    return;
+    for(int i=1;i<=20;i++){
+        if(FlagX==1||FlagX==2){
+            delay_ms(300);
+            FlagX=0;
+          GPIO_PORTF_DATA_R&=~ 0X0E;
+                       while(1){
 
-    }
-    delay_ms(1000);
-    s--;
-    }
+                              GPIO_PORTF_DATA_R^= 0X02;
+                               delay_ms(100);
+
+
+                   if(FlagX==2){
+                               flagD = 1;
+                               GPIO_PORTF_DATA_R &=~ 0X0E;
+
+
+                               FlagX=0;
+                              break;
+                           }
+                           if(FlagF==1){
+                                GPIO_PORTF_DATA_R &=~ 0X0E;
+                                GPIO_PORTF_DATA_R|= 0X0E;
+                                FlagF=0;
+                                FlagX=0;
+
+                           break;
+                           }
+
+                       }
+          }
+
+        if(flagD==1){flagD=0; FlagH=1;FlagF=0;return; }
+        delay_ms(50);
+
+       }
+        s--;
+
+        }
     fini_stopwatch();
 
 }
@@ -88,7 +150,8 @@ void fini_stopwatch(void)
 
      GPIO_PORTF_DATA_R&=~ 0X0E;
         lcd_command(0x0e);
+        FlagH=1;
 
-    getStarted();
+//    getStarted();
 
 }

@@ -13,6 +13,12 @@ void popcorn(void){
     LCD_String("Press SW1 to ");
     lcd_command(0xC0);
     LCD_String("start cooking");
+    while(FlagF==0){}
+    FlagF=0;
+    lcd_command(0x01);
+    lcd_command(0x80);
+    LCD_String("Popcorn");
+    stopwatch(1,0);
 
 
 
@@ -20,6 +26,7 @@ void popcorn(void){
 
 void Beef(void){
     state='B';
+    int secondsPerKilo;
     delay_ms(200);
     lcd_command(0x01);
     lcd_command(0x80);
@@ -41,6 +48,12 @@ void Beef(void){
     lcd_command(0xC0);
     LCD_String("start cooking");
     secondsPerKilo = (key-48)*30;
+    while(FlagF==0){}
+
+    lcd_command(0x01);
+    LCD_String("Defrosting ...");
+    FlagF=0;
+   stopwatch_s(secondsPerKilo);
 
 
     }
@@ -52,6 +65,7 @@ void Beef(void){
 
 void Chicken(void){
     state='C';
+    int secondsPerKilo;
     delay_ms(200);
     lcd_command(0x01);
     lcd_command(0x80);
@@ -73,12 +87,19 @@ void Chicken(void){
     lcd_command(0xC0);
     LCD_String("start cooking");
     secondsPerKilo = (key-48)*12;
+    while(FlagF==0){}
+
+        lcd_command(0x01);
+        LCD_String("Defrosting ...");
+        FlagF=0;
+       stopwatch_s(secondsPerKilo);
+
 
 
     }
     else {
     LCD_errormsg();
-    Beef();
+    Chicken();
     }
 }
 
@@ -86,12 +107,15 @@ void Chicken(void){
 void D(void){
 
     state = 'D';
+ l1:
     lcd_command(0x0C);
     delay_ms(200);
     lcd_command(0x01);
     lcd_command(0x80);
+    char inputs[4];
     LCD_String("Cooking Time?");
-
+  int sD=0;
+  int mD=0;
 
     lcd_command(0xC0);
     LCD_String("00:00");
@@ -100,8 +124,17 @@ void D(void){
 
     for(k=0;k<4;k++){
 
-        while(keypad_getkey()==0){}
+        while(keypad_getkey()==0){
+        }
         if(k==-1) k=0;
+        if(FlagF==1) {
+                            lcd_command(0x01);
+                             LCD_String("Cooking ...");
+                             FlagF=0;
+                             stopwatch(mD,sD);
+                             return;
+        }
+
                 char c = keypad_getkey();
 
                     while(c<48||c>57){
@@ -147,14 +180,14 @@ void D(void){
                     sD=0;
                     mD=0;
                         for(int i=0;i<4;i++){
-            inputs[i]='0';
+            inputs[i]='0','0','0','0';
                         }
 
                         lcd_command(0x01);
                         lcd_command(0x80);
                         LCD_String("Max 30 min");
                         delay_ms(1000);
-                        D();
+                        goto l1;
 
                     }
 

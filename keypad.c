@@ -40,6 +40,7 @@ char keypad_getkey(void)
       {
         if((GPIO_PORTE_DATA_R & 0x1E) & (1U << (j+1)))
           return keymap[j][i];
+        if(FlagF==1&&state=='D') return 1;
       }
     }
   }

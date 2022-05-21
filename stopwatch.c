@@ -142,7 +142,9 @@ void fini_stopwatch(void)
     LCD_String("Done !");
     for(int i=0;i<3;i++){
     GPIO_PORTD_DATA_R |= 0x08;
+        GPIO_PORTF_DATA_R |= 0x08;
     delay_ms(600);
+        GPIO_PORTF_DATA_R &= ~0x0E;
         GPIO_PORTD_DATA_R &= ~0x08;
         delay_ms(200);
 

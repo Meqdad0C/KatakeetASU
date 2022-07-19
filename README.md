@@ -1,4 +1,4 @@
-# KatakeetASU
+# Introduction to Embedded Systems CSE211 Project
 Meqdad Amr 1901664 //
 Youssef Salah 1900190 //
 Hala Hussein 1901204 //
